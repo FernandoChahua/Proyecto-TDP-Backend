@@ -1,0 +1,40 @@
+
+server:
+    port: 8091
+    error:
+        include-message: always
+        include-binding-errors: always
+spring:
+    datasource:
+        password: ''
+        url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/db_tdp
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                format_sql: true
+                dialect: org.hibernate.dialect.MySQL8Dialect
+        show-sql: true
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: superanonimo4321@gmail.com
+      password: P455w0rd#
+
+      properties:
+        mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+
+         
+  
