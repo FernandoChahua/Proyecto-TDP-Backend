@@ -33,7 +33,7 @@ public class Feedback implements Serializable{
 	private String description;
 	private boolean state;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_specialist", nullable = false)
     private Specialist specialist;
 	

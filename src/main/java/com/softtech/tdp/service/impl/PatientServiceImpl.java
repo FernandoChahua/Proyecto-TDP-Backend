@@ -1,15 +1,22 @@
 package com.softtech.tdp.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.softtech.tdp.model.Patient;
+import com.softtech.tdp.repository.PatientRepository;
 import com.softtech.tdp.service.IPatientService;
 
 public class PatientServiceImpl implements IPatientService{
-
+	@Autowired
+	private PatientRepository repo;
+	
 	@Override
 	public Patient create(Patient t) {
-		return null;
+		t.setCreatedAt(LocalDateTime.now());
+		return repo.save(t);
 	}
 
 	@Override

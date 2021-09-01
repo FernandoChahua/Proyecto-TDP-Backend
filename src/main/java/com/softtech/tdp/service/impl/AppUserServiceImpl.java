@@ -9,9 +9,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.softtech.tdp.dto.RequestSignUp;
 import com.softtech.tdp.model.AppUser;
 import com.softtech.tdp.model.ConfirmationToken;
 import com.softtech.tdp.repository.AppUserRepository;
+import com.softtech.tdp.service.IPatientService;
 
 import lombok.AllArgsConstructor;
 
@@ -24,6 +26,7 @@ public class AppUserServiceImpl implements UserDetailsService {
 	private final AppUserRepository appUserRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final ConfirmationTokenServiceImpl confirmationTokenService;
+	private final IPatientService patientService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -35,10 +38,7 @@ public class AppUserServiceImpl implements UserDetailsService {
 		boolean userExists = appUserRepository.findByEmail(appUser.getEmail()).isPresent();
 
 		if (userExists) {
-			// TODO check of attributes are the same and
-			// TODO if email not confirmed send confirmation email.
-
-			throw new IllegalStateException("email already taken");
+			throw new IllegalStateException("El email ya existe");
 		}
 
 		String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
@@ -57,6 +57,16 @@ public class AppUserServiceImpl implements UserDetailsService {
 //        TODO: SEND EMAIL
 
 		return token;
+	}
+	public RequestSignUp signUpPatient(RequestSignUp request) {
+	
+		boolean userExists = appUserRepository.findByEmail(request.getEmail()).isPresent();
+
+		if (userExists) {
+			throw new IllegalStateException("El email ya existe");
+		}
+		
+		
 	}
 
 	public int enableAppUser(String email) {

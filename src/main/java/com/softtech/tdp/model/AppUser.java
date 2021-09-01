@@ -17,6 +17,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,35 +29,31 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class AppUser implements UserDetails {
 
 	
 	private static final long serialVersionUID = 1L;
 
-	@SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String firstName;
-	private String lastName;
+
 	private String email;
+	
+	@JsonIgnore
 	private String password;
 	@Enumerated(EnumType.STRING)
 	private AppUserRole appUserRole;
+	
+	@JsonIgnore
 	private Boolean locked = false;
+	@JsonIgnore
 	private Boolean enabled = false;
 	
 	private Boolean online = false;
-
-	public AppUser(String firstName, String lastName, String email, String password, AppUserRole appUserRole) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.appUserRole = appUserRole;
-	}
 
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -69,14 +68,6 @@ public class AppUser implements UserDetails {
 
 	public String getUsername() {
 		return email;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
 	}
 
 	public boolean isAccountNonExpired() {
@@ -96,6 +87,13 @@ public class AppUser implements UserDetails {
 
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	public AppUser(String email, String password, AppUserRole appUserRole) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.appUserRole = appUserRole;
 	}
 
 }
