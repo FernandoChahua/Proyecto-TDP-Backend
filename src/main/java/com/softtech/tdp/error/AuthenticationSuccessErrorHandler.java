@@ -3,11 +3,9 @@ package com.softtech.tdp.error;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
-import com.softtech.tdp.model.AppUser;
 
 @Component
 public class AuthenticationSuccessErrorHandler implements AuthenticationEventPublisher{
@@ -16,8 +14,8 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
 	public void publishAuthenticationSuccess(Authentication authentication) {
 		// TODO Auto-generated method stub
 		if( authentication.getDetails() instanceof WebAuthenticationDetails) return;
-		UserDetails user = (UserDetails) authentication.getPrincipal();
-		System.out.println("Success Login" + user.getUsername());
+		
+		System.out.println("Success Login" + authentication.getName());
 	}
 
 	@Override

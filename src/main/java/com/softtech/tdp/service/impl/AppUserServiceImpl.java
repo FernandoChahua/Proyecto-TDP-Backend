@@ -10,8 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.softtech.tdp.dto.RequestSignUp;
+import com.softtech.tdp.dto.ResponseSignUp;
 import com.softtech.tdp.model.AppUser;
+import com.softtech.tdp.model.AppUserRole;
 import com.softtech.tdp.model.ConfirmationToken;
+import com.softtech.tdp.model.Patient;
 import com.softtech.tdp.repository.AppUserRepository;
 import com.softtech.tdp.service.IPatientService;
 
@@ -58,15 +61,44 @@ public class AppUserServiceImpl implements UserDetailsService {
 
 		return token;
 	}
-	public RequestSignUp signUpPatient(RequestSignUp request) {
+	public ResponseSignUp signUpPatient(RequestSignUp request) {
 	
 		boolean userExists = appUserRepository.findByEmail(request.getEmail()).isPresent();
 
 		if (userExists) {
 			throw new IllegalStateException("El email ya existe");
 		}
+		// Registrar usuario
+		
+		AppUser user = AppUser.builder()
+				.email(request.getEmail())
+				.appUserRole(AppUserRole.PATIENT)
+				.enabled(true)
+				.locked(false)
+				.online(false)
+				.password(bCryptPasswordEncoder.encode(request.getPassword()))
+				.build();
+		user = appUserRepository.save(user);
 		
 		
+		// Registrar Paciente
+		Patient patient = Patient.builder()
+							.bornDate(request.getBornDate())
+							.createdAt(LocalDateTime.now())
+							.firstName(request.getFirstName())
+							.lastName(request.getLastName())
+							.state(true)
+							.user(user)
+							.build();
+		patient = patientService.create(patient);
+		
+		ResponseSignUp response = ResponseSignUp.builder()
+									.message("Se ha registrado exitosamente.")
+									.statusCode(200)
+									.build();
+		
+		
+		return response;
 	}
 
 	public int enableAppUser(String email) {

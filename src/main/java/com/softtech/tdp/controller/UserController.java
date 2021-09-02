@@ -12,22 +12,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.softtech.tdp.dto.RequestSignUp;
+import com.softtech.tdp.dto.ResponseSignUp;
 import com.softtech.tdp.model.SpecialistRequest;
 import com.softtech.tdp.service.ISpecialistRequestService;
+import com.softtech.tdp.service.impl.AppUserServiceImpl;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 	@Autowired
-	private ISpecialistRequestService specialistRequestService;
+	private AppUserServiceImpl userService;
 	
-	@PostMapping("/")
-	public ResponseEntity<SpecialistRequest> registerRequest(@RequestBody SpecialistRequest body, final HttpServletRequest req){
-		body = specialistRequestService.create(body);
+	@PostMapping("/register-patient")
+	public ResponseEntity<ResponseSignUp> registerRequest(@RequestBody RequestSignUp body, final HttpServletRequest req){
+		ResponseSignUp response = userService.signUpPatient(body);
 		return ResponseEntity
-				.created(URI.create(req.getRequestURI().toString().concat("/").concat(body.getIdSpecialistRequest().toString())))
+				.ok()
 				.contentType(MediaType.APPLICATION_JSON)
-				.body(body);
+				.body(response);
 	}
 	
 }

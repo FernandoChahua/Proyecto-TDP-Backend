@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class AppUser implements UserDetails {
 
 	
@@ -48,9 +50,9 @@ public class AppUser implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private AppUserRole appUserRole;
 	
-	@JsonIgnore
+	
 	private Boolean locked = false;
-	@JsonIgnore
+	
 	private Boolean enabled = false;
 	
 	private Boolean online = false;

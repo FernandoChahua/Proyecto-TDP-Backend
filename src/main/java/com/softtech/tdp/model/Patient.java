@@ -36,7 +36,6 @@ public class Patient implements Serializable {
 
 	private LocalDate bornDate;
 	
-	@JsonIgnore
 	private LocalDateTime createdAt;
 	
 	private boolean state;
