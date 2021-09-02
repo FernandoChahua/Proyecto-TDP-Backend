@@ -49,5 +49,7 @@ public class Specialist implements Serializable{
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
 	private AppUser user;
-	
+
+	@OneToMany(mappedBy = "specialist")
+	Set<Assignment> assignments;
 }
