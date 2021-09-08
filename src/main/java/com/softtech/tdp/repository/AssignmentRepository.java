@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Integer> {
-
-    Optional<Assignment> findByIdAndPatientIdPatient(AssignmentKey id, Integer patientId);
-    Optional<Assignment> findByIdAndSpecialistIdSpecialist(AssignmentKey id, Integer specialistId);
+    Assignment findByPatientIdPatientAndSpecialistIdSpecialist(Integer patientId, Integer specialistId);
+    Boolean existsByPatientIdPatientAndSpecialistIdSpecialist(Integer patientId, Integer specialistId);
 }
