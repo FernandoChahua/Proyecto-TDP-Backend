@@ -4,6 +4,7 @@ import com.softtech.tdp.exception.ResourceNotFoundException;
 import com.softtech.tdp.model.Assignment;
 import com.softtech.tdp.model.AssignmentKey;
 import com.softtech.tdp.model.Patient;
+import com.softtech.tdp.model.Specialist;
 import com.softtech.tdp.repository.AssignmentRepository;
 import com.softtech.tdp.repository.PatientRepository;
 import com.softtech.tdp.repository.SpecialistRepository;
@@ -11,8 +12,6 @@ import com.softtech.tdp.service.IAssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AssignmentServiceImpl implements IAssignmentService {
@@ -30,50 +29,46 @@ public class AssignmentServiceImpl implements IAssignmentService {
         Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new
                 ResourceNotFoundException("Patient", "Id", patientId));
 
-        return  specialistRepository.findById(specialistId).map(specialist -> {
-            assignment.setSpecialist(specialist);
-            assignment.setPatient(patient);
-            return assignmentRepository.save(assignment);
-        }).orElseThrow(() -> new ResourceNotFoundException("Specialist", "Id", specialistId));
+        Specialist specialist = specialistRepository.findById(specialistId).orElseThrow(() -> new
+                ResourceNotFoundException("Specialist", "Id", specialistId));
+        assignment.setPatient(patient);
+        assignment.setSpecialist(specialist);
+        assignment.setId(new AssignmentKey(patientId, specialistId));
+        return assignmentRepository.save(assignment);
     }
 
     @Override
-    public Assignment getAssignmentByIdAndPatientId(AssignmentKey assignmentId, Integer patientId) {
-        return patientRepository.findById(patientId).map(patient -> {
-            return assignmentRepository.findByIdAndPatientIdPatient(assignmentId, patientId).
-                    orElseThrow(() -> new ResourceNotFoundException("Assignment not found with Id "+assignmentId+" and" +
-                            "Patient Id "+patientId));
-        }).orElseThrow(() -> new ResourceNotFoundException("Patient", "Id", patientId));
+    public Assignment getByPatientIdAndSpecialistId(Integer patientId, Integer specialistId) {
+        if(!assignmentRepository.existsByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId))
+            throw new ResourceNotFoundException("Assignment not found with Patient Id "+patientId+" and " +
+                    "Specialist Id "+specialistId);
+        else
+            return assignmentRepository.findByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId);
     }
 
     @Override
-    public Assignment getAssignmentByIdAndSpecialistId(AssignmentKey assignmentId, Integer specialistId) {
-        if (!specialistRepository.existsById(specialistId))
-            throw new ResourceNotFoundException("Specialist", "Id", specialistId);
-        return assignmentRepository.findByIdAndSpecialistIdSpecialist(assignmentId, specialistId).
-                orElseThrow(() -> new ResourceNotFoundException("Assignment not found with Id "+assignmentId+" and " +
-                        "specialist Id "+specialistId));
+    public Assignment updateAssignment(Integer patientId, Integer specialistId,
+                                       Assignment assignmentDetails) {
+        if(!assignmentRepository.existsByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId))
+            throw new ResourceNotFoundException("Assignment not found with Patient Id "+patientId+" and " +
+                    "Specialist Id "+specialistId);
+
+        Assignment assignment = assignmentRepository.findByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId);
+        assignment.setRating(assignmentDetails.getRating());
+        assignment.setCriticality(assignmentDetails.getCriticality());
+        assignment.setStatus(assignmentDetails.getStatus());
+        return assignmentRepository.save(assignment);
+
     }
 
     @Override
-    public Assignment updateAssignmentByPatientId(AssignmentKey assignmentId, Integer patientId, Assignment assignmentDetails) {
-        if (!patientRepository.existsById(patientId))
-            throw new ResourceNotFoundException("Patient", "Id", patientId);
-        return assignmentRepository.findByIdAndPatientIdPatient(assignmentId, patientId).map(assignment -> {
-            assignment.setRating(assignmentDetails.getRating());
-            assignment.setCriticality(assignmentDetails.getCriticality());
-            assignment.setStatus(assignmentDetails.getStatus());
-            return assignmentRepository.save(assignment);
-        }).orElseThrow(() -> new ResourceNotFoundException("Assignment not found with Id "+assignmentId+" and patient " +
-                "Id "+patientId));
-    }
+    public ResponseEntity<?> deleteAssignment(Integer patientId, Integer specialistId) {
+        if(!assignmentRepository.existsByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId))
+            throw new ResourceNotFoundException("Assignment not found with Patient Id "+patientId+" and " +
+                    "Specialist Id "+specialistId);
 
-    @Override
-    public ResponseEntity<?> deleteAssignment(AssignmentKey assignmentId, Integer patientId) {
-        return assignmentRepository.findByIdAndPatientIdPatient(assignmentId, patientId).map(assignment -> {
-            assignmentRepository.delete(assignment);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("Assignment not found with Id "+assignmentId+" and " +
-                        "patient Id "+patientId));
+        Assignment assignment = assignmentRepository.findByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId);
+        assignmentRepository.delete(assignment);
+        return ResponseEntity.ok().build();
     }
 }

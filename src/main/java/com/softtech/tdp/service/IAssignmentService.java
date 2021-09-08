@@ -4,10 +4,11 @@ import com.softtech.tdp.model.Assignment;
 import com.softtech.tdp.model.AssignmentKey;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 public interface IAssignmentService{
     Assignment createAssignment(Integer patientId, Integer specialistId, Assignment assignment);
-    Assignment getAssignmentByIdAndPatientId(AssignmentKey assignmentId, Integer patientId);
-    Assignment getAssignmentByIdAndSpecialistId(AssignmentKey assignmentId, Integer specialistId);
-    Assignment updateAssignmentByPatientId(AssignmentKey assignmentId, Integer patientId, Assignment assignmentDetails);
-    ResponseEntity<?> deleteAssignment(AssignmentKey assignmentId, Integer patientId);
+    Assignment getByPatientIdAndSpecialistId(Integer patientId, Integer specialistId);
+    Assignment updateAssignment(Integer patientId, Integer specialistId, Assignment assignmentDetails);
+    ResponseEntity<?> deleteAssignment(Integer patientId, Integer specialistId);
 }
