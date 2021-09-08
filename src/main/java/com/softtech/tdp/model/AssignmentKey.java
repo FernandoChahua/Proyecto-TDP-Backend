@@ -1,5 +1,6 @@
 package com.softtech.tdp.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -8,10 +9,15 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
+@AllArgsConstructor
 public class AssignmentKey implements Serializable {
-    @Column(name = "specialist_id")
-    Integer idSpecialist;
-
     @Column(name = "patient_id")
-    Integer idPatient;
+    private Integer patientId;
+
+    @Column(name = "specialist_id")
+    private Integer specialistId;
+
+    public AssignmentKey() {
+
+    }
 }
