@@ -23,6 +23,7 @@ public class Patient implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "patient_id")
 	private Integer idPatient;
 
 	private String firstName;
