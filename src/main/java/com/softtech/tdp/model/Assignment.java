@@ -20,12 +20,12 @@ public class Assignment implements Serializable {
     private AssignmentCriticality criticality;
 
     @ManyToOne
-    @MapsId("idSpecialist")
+    @MapsId("specialistId")
     @JoinColumn(name = "specialist_id")
     Specialist specialist;
 
     @ManyToOne
-    @MapsId("idPatient")
+    @MapsId("patientId")
     @JoinColumn(name = "patient_id")
     Patient patient;
 }
