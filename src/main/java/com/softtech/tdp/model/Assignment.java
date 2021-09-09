@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,4 +29,7 @@ public class Assignment implements Serializable {
     @MapsId("patientId")
     @JoinColumn(name = "patient_id")
     Patient patient;
+
+    @OneToMany(mappedBy = "assignment")
+    private Set<Message> messages;
 }
