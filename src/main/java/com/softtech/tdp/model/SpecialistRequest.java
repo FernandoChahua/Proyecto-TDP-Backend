@@ -2,6 +2,7 @@ package com.softtech.tdp.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,9 +35,11 @@ public class SpecialistRequest implements Serializable{
 	
 	private String urlCertificate;
 	
-	private String username;
 	private String password;
 	
-	private boolean state;
+	private String category;
+	
+	private LocalDateTime createdAt;
+	private SpecialistRequestState state;
 	
 }

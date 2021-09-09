@@ -24,5 +24,11 @@ public interface AppUserRepository
     @Query("UPDATE AppUser a " +
             "SET a.enabled = TRUE WHERE a.email = ?1")
     int enableAppUser(String email);
+    
+    @Transactional
+    @Modifying
+    @Query("UPDATE AppUser a " +
+            "SET a.online = ?1 WHERE a.id = ?2")
+    int changeStatusOnline(boolean online,Long idUser);
 
 }

@@ -2,20 +2,25 @@ package com.softtech.tdp.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.softtech.tdp.model.News;
 import com.softtech.tdp.model.SpecialistRequest;
+import com.softtech.tdp.model.SpecialistRequestState;
 import com.softtech.tdp.service.ISpecialistRequestService;
 
 @RestController
@@ -39,7 +44,12 @@ public class SpecialistRequestController {
 		return ResponseEntity
 				.ok()
 				.contentType(MediaType.APPLICATION_JSON)
-				.body(specialistRequestService.findAll());
+				.body(specialistRequestService.findAll().stream()
+						.map(e -> {
+							e.setPassword("");
+							return e;
+							})
+						.collect(Collectors.toList()));
 	}
 	
 	@GetMapping("/{id}")
@@ -48,5 +58,28 @@ public class SpecialistRequestController {
 				.ok()
 				.contentType(MediaType.APPLICATION_JSON)
 				.body(specialistRequestService.findById(id));
+	}
+	
+	@GetMapping("/state/{state}")
+	public ResponseEntity<List<SpecialistRequest>> findByState(@PathVariable("state")SpecialistRequestState state){
+	
+		return ResponseEntity
+				.ok()
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(specialistRequestService.findByState(state).stream()
+						.map(e -> {
+							e.setPassword("");
+							return e;
+							})
+						.collect(Collectors.toList()));
+	}
+	
+	@PutMapping("/changeState/{state}/{id}")
+	public ResponseEntity<SpecialistRequest> update(@PathVariable("state") SpecialistRequestState state,@PathVariable("id")Integer id) throws Exception{
+		SpecialistRequest body = specialistRequestService.updateState(id, state);
+		body.setPassword("");
+			return ResponseEntity.ok()
+					.contentType(MediaType.APPLICATION_JSON)
+					.body(body);
 	}
 }

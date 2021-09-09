@@ -69,12 +69,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                .and()
                .authorizeRequests()
+               
                .antMatchers("/user/**").permitAll()
                .antMatchers("/oauth/**").permitAll()
               // .antMatchers("/api/glee/**").hasAnyAuthority("ADMIN", "USER")
                //.antMatchers("/api/users/**").hasAuthority("ADMIN")
                //.antMatchers("/api/**").authenticated()
-               .anyRequest().authenticated()
+               .anyRequest().permitAll()
                .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler())
                .and().cors().configurationSource(corsConfigurationSource());
    }

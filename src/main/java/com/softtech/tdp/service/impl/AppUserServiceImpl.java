@@ -15,6 +15,7 @@ import com.softtech.tdp.model.AppUser;
 import com.softtech.tdp.model.AppUserRole;
 import com.softtech.tdp.model.ConfirmationToken;
 import com.softtech.tdp.model.Patient;
+import com.softtech.tdp.model.SpecialistRequest;
 import com.softtech.tdp.repository.AppUserRepository;
 import com.softtech.tdp.service.IPatientService;
 
@@ -100,8 +101,47 @@ public class AppUserServiceImpl implements UserDetailsService {
 		
 		return response;
 	}
+	
+	public boolean signUpSpecialist(SpecialistRequest request) {
+		boolean userExists = appUserRepository.findByEmail(request.getEmail()).isPresent();
+
+		if (userExists) {
+			throw new IllegalStateException("El email ya existe");
+		}
+		// Registrar usuario
+		
+		AppUser user = AppUser.builder()
+				.email(request.getEmail())
+				.appUserRole(AppUserRole.SPECIALIST)
+				.enabled(true)
+				.locked(false)
+				.online(false)
+				.password(bCryptPasswordEncoder.encode(request.getPassword()))
+				.build();
+		user = appUserRepository.save(user);
+		
+		
+		return true;
+	}
 
 	public int enableAppUser(String email) {
 		return appUserRepository.enableAppUser(email);
+	}
+	
+	public boolean checkExistEmail(String email) {
+		return appUserRepository.findByEmail(email).isPresent();
+	}
+	
+	public AppUser findByEmail(String email) {
+		return appUserRepository.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+	}
+	
+	public AppUser findById(Long id) {
+		return appUserRepository.findById(id).get();
+	}
+	
+	public int changeStatusOnline(Long idUser,boolean online) {
+		return appUserRepository.changeStatusOnline(online, idUser);
 	}
 }

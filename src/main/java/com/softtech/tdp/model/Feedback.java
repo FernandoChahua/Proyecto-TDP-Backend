@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +35,8 @@ public class Feedback implements Serializable{
 	private String description;
 	private boolean state;
 	
+	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_specialist", nullable = false)
     private Specialist specialist;

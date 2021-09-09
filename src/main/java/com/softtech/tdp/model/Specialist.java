@@ -2,6 +2,7 @@ package com.softtech.tdp.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,13 +35,15 @@ public class Specialist implements Serializable{
 	
 	private String lastName;
 	
-	private String email;
-	
 	private LocalDate bornDate;
 	
 	private String urlCertificate;
 	
+	private String category;
+	
 	private boolean state;
+	private LocalDateTime createdAt;
+	
 	
 	@OneToMany(mappedBy = "specialist", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
