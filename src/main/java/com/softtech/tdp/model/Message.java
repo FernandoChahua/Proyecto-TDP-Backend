@@ -1,5 +1,6 @@
 package com.softtech.tdp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,15 +17,17 @@ public class Message implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
-    LocalDate registerDate;
+    private LocalDate registerDate;
 
     @NotBlank
     @NotNull
     @Size(max = 350)
-    String message;
+    private String content;
 
     @ManyToOne
     private Assignment assignment;
+
+    private AppUserRole sentBy;
 }
