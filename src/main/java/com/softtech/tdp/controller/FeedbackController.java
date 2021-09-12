@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.softtech.tdp.dto.FeedbackExtraInfoDTO;
 import com.softtech.tdp.model.Feedback;
 import com.softtech.tdp.model.News;
 import com.softtech.tdp.service.IFeedbackService;
@@ -31,19 +32,19 @@ public class FeedbackController {
 	
 	
 	@GetMapping
-	public ResponseEntity<List<Feedback>> findAll(){
+	public ResponseEntity<List<FeedbackExtraInfoDTO>> findAll(){
 		return ResponseEntity
 				.ok()
 				.contentType(MediaType.APPLICATION_JSON)
-				.body(feedbackService.findAll());
+				.body(feedbackService.findAllCustom());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Feedback> findById(@PathVariable("id") Integer id){
+	public ResponseEntity<FeedbackExtraInfoDTO> findById(@PathVariable("id") Integer id){
 		return ResponseEntity
 				.ok()
 				.contentType(MediaType.APPLICATION_JSON)
-				.body(feedbackService.findById(id));
+				.body(feedbackService.findByIdCustom(id));
 	}
 	
 	@PostMapping("/{idSpecialist}")

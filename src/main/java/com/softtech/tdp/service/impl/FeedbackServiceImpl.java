@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.softtech.tdp.dto.FeedbackExtraInfoDTO;
 import com.softtech.tdp.model.Feedback;
 import com.softtech.tdp.model.Specialist;
 import com.softtech.tdp.repository.FeedbackRepository;
@@ -44,6 +45,20 @@ public class FeedbackServiceImpl implements IFeedbackService{
 	public Feedback findById(Integer id) {
 		return feedbackRepository.findById(id).get();
 	}
+	@Override
+	public List<FeedbackExtraInfoDTO> findAllCustom() {
+		return feedbackRepository.findAll()
+				.stream()
+				.map(e -> feedbackToExtraInfoDTO(e))
+				.sorted((f1,f2) -> f1.getRegistrationDate().compareTo(f2.getRegistrationDate()))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public FeedbackExtraInfoDTO findByIdCustom(Integer id) {
+		FeedbackExtraInfoDTO response = feedbackToExtraInfoDTO(feedbackRepository.findById(id).get());
+		return response;
+	}
 
 	@Override
 	public void deleteById(Integer id) {
@@ -57,6 +72,19 @@ public class FeedbackServiceImpl implements IFeedbackService{
 		feedback.setRegistrationDate(LocalDateTime.now());
 		System.out.println(specialist.toString());
 		return feedbackRepository.save(feedback);
+	}
+	
+	private FeedbackExtraInfoDTO feedbackToExtraInfoDTO(Feedback feedback) {
+		return FeedbackExtraInfoDTO.builder()
+									.createdBy(String.format("%s %s",feedback.getSpecialist().getFirstName(),feedback.getSpecialist().getLastName()))
+									.description(feedback.getDescription())
+									.title(feedback.getTitle())
+									.idFeedback(feedback.getIdFeedback())
+									.state(feedback.isState())
+									.registrationDate(feedback.getRegistrationDate())
+									.build();
+											
+									
 	}
 
 }
