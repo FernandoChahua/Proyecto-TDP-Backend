@@ -31,7 +31,7 @@ public class PatientServiceImpl implements IPatientService{
 
 	@Override
 	public Patient update(Patient t) {
-		return null;
+		return repo.save(t);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class PatientServiceImpl implements IPatientService{
 
 	@Override
 	public Patient findById(Integer id) {
-		return null;
+		return repo.findById(id).get();
 	}
 
 	@Override

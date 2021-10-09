@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.softtech.tdp.dto.ResponsePatientProfile;
 import com.softtech.tdp.dto.ResponseSpecialistProfile;
 import com.softtech.tdp.model.AppUser;
-import com.softtech.tdp.model.Patient;
 import com.softtech.tdp.model.Specialist;
 import com.softtech.tdp.repository.SpecialistRepository;
 import com.softtech.tdp.service.ISpecialistService;
@@ -31,7 +29,7 @@ public class SpecialistServiceImpl implements ISpecialistService{
 
 	@Override
 	public Specialist update(Specialist t) {
-		return null;
+		return repo.save(t);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.softtech.tdp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -19,7 +18,7 @@ public class Message implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private LocalDate registerDate;
+    private LocalDateTime registerDate;
 
     @NotBlank
     @NotNull
@@ -29,5 +28,6 @@ public class Message implements Serializable {
     @ManyToOne
     private Assignment assignment;
 
+    @Enumerated(EnumType.STRING)
     private AppUserRole sentBy;
 }

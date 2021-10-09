@@ -1,6 +1,9 @@
 package com.softtech.tdp.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +11,9 @@ import java.util.Set;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Assignment implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -17,8 +23,12 @@ public class Assignment implements Serializable {
     private AssignmentStatus status;
 
     private float rating;
+    
+    private boolean isRated;
 
     private AssignmentCriticality criticality;
+    
+    private Integer score;
 
     @ManyToOne
     @MapsId("specialistId")

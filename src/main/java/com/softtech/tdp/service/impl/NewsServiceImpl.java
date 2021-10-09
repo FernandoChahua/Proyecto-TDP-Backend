@@ -1,6 +1,7 @@
 package com.softtech.tdp.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class NewsServiceImpl implements INewsService{
 
 	@Override
 	public News findById(Integer id) {
-		return newsRepository.findById(id).get();
+		return newsRepository.findById(id).orElseThrow(()-> new NoSuchElementException("No se encontró el registro."));
 	}
 
 	@Override

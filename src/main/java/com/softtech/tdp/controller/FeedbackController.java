@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.softtech.tdp.dto.FeedbackExtraInfoDTO;
 import com.softtech.tdp.model.Feedback;
-import com.softtech.tdp.model.News;
 import com.softtech.tdp.service.IFeedbackService;
 
 @RestController
@@ -41,6 +40,7 @@ public class FeedbackController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<FeedbackExtraInfoDTO> findById(@PathVariable("id") Integer id){
+		System.out.println("Aqui");
 		return ResponseEntity
 				.ok()
 				.contentType(MediaType.APPLICATION_JSON)

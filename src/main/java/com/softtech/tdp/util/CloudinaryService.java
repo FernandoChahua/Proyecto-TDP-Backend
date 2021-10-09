@@ -16,13 +16,14 @@ import com.cloudinary.utils.ObjectUtils;
 public class CloudinaryService {
 	public String uploadFile(FilePart file) throws IOException {
 		Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-				"cloud_name", "powpunch",
-				"api_key", "714724176192641",
-				"api_secret", "YWaV0faeDKsgdofoxZFE2cAUhVE"));  
+				"cloud_name", "",
+				"api_key", "",
+				"api_secret", ""));  
 		
 		File f = Files.createTempFile("temp", file.filename()).toFile();
 		try {
-			Map response = cloudinary.uploader().upload(f , ObjectUtils.asMap("resource_type", "auto"));
+			@SuppressWarnings("unchecked")
+			Map<String, Object> response = cloudinary.uploader().upload(f , ObjectUtils.asMap("resource_type", "auto"));
 			
 			JSONObject json=new JSONObject(response);
 			String url=json.getString("url");		

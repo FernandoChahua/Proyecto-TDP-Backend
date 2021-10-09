@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.softtech.tdp.exception.ResourceNotFoundException;
 import com.softtech.tdp.model.AppUser;
 import com.softtech.tdp.model.Specialist;
 import com.softtech.tdp.model.SpecialistRequest;
@@ -52,7 +53,7 @@ public class SpecialistRequestServiceImpl implements ISpecialistRequestService{
 
 	@Override
 	public SpecialistRequest findById(Integer id) {
-		return repository.findById(id).get();
+		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("No se encontró ningun registro con el id %s.",id.toString())));
 	}
 
 	@Override

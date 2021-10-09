@@ -2,12 +2,14 @@ package com.softtech.tdp.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.softtech.tdp.dto.FeedbackExtraInfoDTO;
+import com.softtech.tdp.exception.ResourceNotFoundException;
 import com.softtech.tdp.model.Feedback;
 import com.softtech.tdp.model.Specialist;
 import com.softtech.tdp.repository.FeedbackRepository;
@@ -42,8 +44,9 @@ public class FeedbackServiceImpl implements IFeedbackService{
 	}
 
 	@Override
-	public Feedback findById(Integer id) {
+	public Feedback findById(Integer id){
 		return feedbackRepository.findById(id).get();
+		
 	}
 	@Override
 	public List<FeedbackExtraInfoDTO> findAllCustom() {
@@ -56,7 +59,7 @@ public class FeedbackServiceImpl implements IFeedbackService{
 
 	@Override
 	public FeedbackExtraInfoDTO findByIdCustom(Integer id) {
-		FeedbackExtraInfoDTO response = feedbackToExtraInfoDTO(feedbackRepository.findById(id).get());
+		FeedbackExtraInfoDTO response = feedbackToExtraInfoDTO(feedbackRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format("No se encontró ningun registro con el id %s.",id.toString()))));
 		return response;
 	}
 
@@ -70,7 +73,7 @@ public class FeedbackServiceImpl implements IFeedbackService{
 		Specialist specialist = specialistService.findById(idSpecialist);
 		feedback.setSpecialist(specialist);
 		feedback.setRegistrationDate(LocalDateTime.now());
-		System.out.println(specialist.toString());
+		
 		return feedbackRepository.save(feedback);
 	}
 	

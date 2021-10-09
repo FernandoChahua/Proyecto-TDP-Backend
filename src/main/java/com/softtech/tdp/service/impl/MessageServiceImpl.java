@@ -11,7 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class MessageServiceImpl implements IMessageService {
@@ -31,7 +32,7 @@ public class MessageServiceImpl implements IMessageService {
         }
         else {
             message.setSentBy(AppUserRole.PATIENT);
-            message.setRegisterDate(LocalDate.now());
+            message.setRegisterDate(LocalDateTime.now());
             Assignment assignment = assignmentRepository.findByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId);
             message.setAssignment(assignment);
             return messageRepository.save(message);
@@ -46,7 +47,7 @@ public class MessageServiceImpl implements IMessageService {
         }
         else {
             message.setSentBy(AppUserRole.SPECIALIST);
-            message.setRegisterDate(LocalDate.now());
+            message.setRegisterDate(LocalDateTime.now());
             return messageRepository.save(message);
         }
     }
@@ -78,4 +79,24 @@ public class MessageServiceImpl implements IMessageService {
         messageRepository.delete(message);
         return ResponseEntity.ok().build();
     }
+
+	@Override
+	public List<Message> findAllBySpecialistAndPatient(Integer specialistId, Integer patientId) {
+		return messageRepository.findAllByAssignmentPatientIdPatientAndAssignmentSpecialistIdSpecialist(patientId, specialistId);
+	}
+
+	@Override
+	public Message createMessage(Integer patientId, Integer specialistId, AppUserRole role, Message message) {
+		if (!assignmentRepository.existsByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId)){
+            throw new ResourceNotFoundException("Assignment not found with Patient Id "+patientId+" and " +
+                    "Specialist Id "+specialistId);
+        }
+        else {
+        	Assignment assignment = assignmentRepository.findByPatientIdPatientAndSpecialistIdSpecialist(patientId, specialistId);
+            message.setSentBy(role);
+            message.setRegisterDate(LocalDateTime.now());
+            message.setAssignment(assignment);
+            return messageRepository.save(message);
+        }
+	}
 }

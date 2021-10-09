@@ -11,7 +11,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -51,11 +50,11 @@ public class AppUser implements UserDetails {
 	private AppUserRole appUserRole;
 	
 	
-	private Boolean locked = false;
+	private Boolean locked;
 	
-	private Boolean enabled = false;
+	private Boolean enabled;
 	
-	private Boolean online = false;
+	private Boolean online;
 
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
