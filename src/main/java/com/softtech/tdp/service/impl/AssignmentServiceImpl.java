@@ -116,6 +116,7 @@ public class AssignmentServiceImpl implements IAssignmentService {
         								.criticality((score < 14)?AssignmentCriticality.low:
         											(score<20)?AssignmentCriticality.medium:
         												AssignmentCriticality.high)
+        								.score(score)
         								.isRated(false)
         								.rating(0)
         								.patient(patient)
